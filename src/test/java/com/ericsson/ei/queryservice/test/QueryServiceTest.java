@@ -161,6 +161,7 @@ public class QueryServiceTest {
         try {
             JsonNode tempRecord = new ObjectMapper().readTree(result.get(0));
             record = (ObjectNode) tempRecord;
+            record.remove("Time");
             actual = new ObjectMapper().readTree(aggregatedObject);
 
         } catch (Exception e) {

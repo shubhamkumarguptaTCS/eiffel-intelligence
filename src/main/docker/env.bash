@@ -14,7 +14,7 @@ export KIBANA_PORT=8085
 export MONSTACHE_PORT=8086
 
 
-export MONGODB_IMAGE="mongo:latest"
+export MONGODB_IMAGE="bitnami/mongodb:4.4.9-debian-10-r22"
 export RABBITMQ_IMAGE="bitnami/rabbitmq:3.8-debian-9"
 export EIFFEL_ER_IMAGE="eiffelericsson/eiffel-er:0.0.67"
 export JENKINS_IMAGE="bitnami/jenkins:2.138.3"

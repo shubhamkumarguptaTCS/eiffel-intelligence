@@ -1,4 +1,3 @@
-
 <!---
    Copyright 2017-2018 Ericsson AB.
    For a full list of individual contributors, please see the commit history.

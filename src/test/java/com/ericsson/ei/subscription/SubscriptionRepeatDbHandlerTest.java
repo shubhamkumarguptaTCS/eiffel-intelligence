@@ -124,7 +124,7 @@ public class SubscriptionRepeatDbHandlerTest extends FunctionalTestBase {
         assertEquals(subscriptionId2, dbResult.get("subscriptionId").toString());
 
         String actual = dbResult.get("requirements").toString();
-        String expected = "{ \"" + requirementId2 + "\" : [ \"" + aggrObjId2 + "\"]}";
+        String expected = "{\"" + requirementId2 + "\": [\"" + aggrObjId2 + "\"]}";
 
         String msg = "\nACTUAL  : |" + actual + "|\nEXPECTED: |" + expected + "|";
         boolean result = true;
@@ -175,7 +175,7 @@ public class SubscriptionRepeatDbHandlerTest extends FunctionalTestBase {
         log.error("DB Content: " + dbResult.toString());
 
         String actual = dbResult.get("requirements").toString();
-        String expected = "{ \"0\" : [ \"" + aggrObjId + "\" , \"" + aggrObjId2 + "\"]}";
+        String expected = "{\"0\": [\"" + aggrObjId + "\", \"" + aggrObjId2 + "\"]}";
         String msg = "\nACTUAL  : |" + actual + "|\nEXPECTED: |" + expected + "|";
         boolean result = true;
         if (!expected.equals(actual)) {

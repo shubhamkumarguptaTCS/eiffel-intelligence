@@ -33,7 +33,7 @@ version: "2.1"
 services:
   replica1:
     container_name: replica1
-    image: mongo:latest
+    image: bitnami/mongodb:4.4.9-debian-10-r22
     expose:
       - "27017"
     ports:
@@ -46,7 +46,7 @@ services:
           - replica1
   replica2:
     container_name: replica2
-    image: mongo:latest
+    image: bitnami/mongodb:4.4.9-debian-10-r22
     expose:
       - "27017"
     ports:
@@ -59,7 +59,7 @@ services:
           - replica3
   replica3:
     container_name: replica3
-    image: mongo:latest
+    image: bitnami/mongodb:4.4.9-debian-10-r22
     expose:
       - "27017"
     ports:
