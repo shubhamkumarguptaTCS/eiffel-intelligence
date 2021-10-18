@@ -29,7 +29,7 @@ import lombok.Getter;
 
 public class TestConfigs {
 
-    private static final String DEFAULT_MONGO_URI = "mongodb://localhost:27018";
+    private static final String DEFAULT_MONGO_URI = "mongodb://mongodb:27018";
     @Getter
     private static AMQPBrokerManager amqpBroker;
     private static MongodForTestsFactory testsFactory;
