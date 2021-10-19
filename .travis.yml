@@ -26,6 +26,10 @@ stages:
 # List of jobs to run, tied to specific stages
 jobs:
   include:
+      before_script:
+        - source src/main/docker/env.bash
+        - docker-compose -f src/main/docker/docker-compose.yml up -d mongodb mongodb-auth rabbitmq eiffel-er jenkins mail-server
+        - sleep 60
     - stage: test
       name: unitAndFunctionalTests
       script:
@@ -33,10 +37,6 @@ jobs:
     - stage: test
       name: integrationTests
       # To ensure docker containers are fully up and running we sleep 60s
-      before_script:
-        - source src/main/docker/env.bash
-        - docker-compose -f src/main/docker/docker-compose.yml up -d mongodb mongodb-auth rabbitmq eiffel-er jenkins mail-server
-        - sleep 60
       script:
         - mvn verify -DskipUTs -Djasypt.encryptor.password=integrationtest -Dspring.config.location=src/integrationtests/resources/application.properties -B
     - stage: report_coverage
