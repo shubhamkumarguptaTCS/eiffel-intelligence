@@ -16,7 +16,6 @@ before_install:
   - java -version
   - uname -a
   - chmod +x pom.xml
-  - printenv
 
 # Only running report_coverage (after merge) to master branch
 stages:
@@ -30,6 +29,7 @@ jobs:
     - stage: test
       name: unitAndFunctionalTests
       script:
+		- printenv
         - mvn test -DskipITs -Dsurefire.rerunFailingTestsCount=2 -Dspring.config.location=src/main/resources/application.properties -B
     - stage: test
       name: integrationTests
