@@ -33,7 +33,7 @@ version: "2.1"
 services:
   mongodb-auth:
     restart: always
-    image: "bitnami/mongodb:4.4.9-debian-10-r22"
+    image: bitnami/mongodb:4.4.9-debian-10-r22
     expose:
       - "27017"
     ports:
@@ -52,7 +52,7 @@ services:
               - mongodb-auth
   mongodb:
     restart: always
-    image: "bitnami/mongodb:4.4.9-debian-10-r22"
+    image: bitnami/mongodb:4.4.9-debian-10-r22
     expose:
       - "27017"
     ports:
