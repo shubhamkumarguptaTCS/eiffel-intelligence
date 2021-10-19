@@ -26,12 +26,12 @@ stages:
 # List of jobs to run, tied to specific stages
 jobs:
   include:
+    - stage: test
+      name: unitAndFunctionalTests
       before_script:
         - source src/main/docker/env.bash
         - docker-compose -f src/main/docker/docker-compose.yml up -d mongodb mongodb-auth rabbitmq eiffel-er jenkins mail-server
         - sleep 60
-    - stage: test
-      name: unitAndFunctionalTests
       script:
         - mvn test -DskipITs -Dsurefire.rerunFailingTestsCount=2 -Dspring.config.location=src/main/resources/application.properties -B
     - stage: test
