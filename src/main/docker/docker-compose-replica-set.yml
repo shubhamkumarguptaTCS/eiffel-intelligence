@@ -35,9 +35,9 @@ services:
     container_name: replica1
     image: bitnami/mongodb:4.4.9-debian-10-r22
     expose:
-      - "27018"
+      - "27017"
     ports:
-      - "27001:27018"
+      - "27001:27017"
     restart: always
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
     networks:
@@ -48,9 +48,9 @@ services:
     container_name: replica2
     image: bitnami/mongodb:4.4.9-debian-10-r22
     expose:
-      - "27018"
+      - "27017"
     ports:
-      - "27002:27018"
+      - "27002:27017"
     restart: always
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
     networks:
@@ -61,9 +61,9 @@ services:
     container_name: replica3
     image: bitnami/mongodb:4.4.9-debian-10-r22
     expose:
-      - "27018"
+      - "27017"
     ports:
-      - "27003:27018"
+      - "27003:27017"
     restart: always
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
     networks:

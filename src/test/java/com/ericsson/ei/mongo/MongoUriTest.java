@@ -31,7 +31,7 @@ public class MongoUriTest {
     private static final String PASSWORD = "my_password";
     private static final String NEW_PASSWORD = "my_new_password";
     private static final String URI = String.format(
-            "mongodb://%s:%s@hostname1:27018,hostname2:27018", USERNAME, PASSWORD);
+            "mongodb://%s:%s@hostname1:27017,hostname2:27017", USERNAME, PASSWORD);
 
     @Test
     public void testGetSafeUri() throws Exception {
@@ -41,7 +41,7 @@ public class MongoUriTest {
 
     @Test
     public void testGetSafeUriNoUsernameAndPassword() throws Exception {
-        String uriNoUserPass = "mongodb://hostname1:27018,hostname2:27018";
+        String uriNoUserPass = "mongodb://hostname1:27017,hostname2:27017";
         String safeUri = MongoUri.getUriWithHiddenPassword(uriNoUserPass);
         assertEquals("Uri should be unchanged when no username or password is given", uriNoUserPass, safeUri);
     }
@@ -60,9 +60,9 @@ public class MongoUriTest {
          * If a uri is mongodb://admin:admin@hostname1:27017 only the password should be changed.
          */
         String uriWithSameUserAndPassword = String.format(
-                "mongodb://%s:%s@hostname1:27018,hostname2:27018", USERNAME, USERNAME);
+                "mongodb://%s:%s@hostname1:27017,hostname2:27017", USERNAME, USERNAME);
         String expectedNewUri = String.format(
-                "mongodb://%s:%s@hostname1:27018,hostname2:27018", USERNAME, NEW_PASSWORD);
+                "mongodb://%s:%s@hostname1:27017,hostname2:27017", USERNAME, NEW_PASSWORD);
 
         String updatedUri = MongoUri.getUriWithNewPassword(uriWithSameUserAndPassword,
                 NEW_PASSWORD);

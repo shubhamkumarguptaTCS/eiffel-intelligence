@@ -69,7 +69,7 @@ public class FlowStepsIT extends IntegrationTestBase {
     @Value("${jenkins.password:admin}")
     public String jenkinsPassword;
 
-    @Value("${mailhog.uri:mongodb://mongodb:27018}")
+    @Value("${mailhog.uri:mongodb://localhost:27017}")
     public String mailHogUri;
     @Value("${mailhog.collection:messages}")
     public String mailhogCollectionName;

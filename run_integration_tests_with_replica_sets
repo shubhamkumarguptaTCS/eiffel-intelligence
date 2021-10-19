@@ -1,8 +1,8 @@
 #! /bin/bash
 
-mongodb_uri="mongodb://replica1:27018,replica2:27018,replica3:27018"
+mongodb_uri="mongodb://replica1:27017,replica2:27017,replica3:27017"
 mongodb_database="ei-test-db"
-mailhog_uri="mongodb://mongodb:27018"
+mailhog_uri="mongodb://localhost:27017"
 rabbitmg_host="rabbitmq"
 jenkins_host="jenkins"
 jenkins_port="8080"
@@ -47,9 +47,9 @@ function do_setup {
   echo 'rs.initiate( {
     _id : "rs0",
     members: [
-      { _id: 0, host: "replica1:27018" },
-      { _id: 1, host: "replica2:27018" },
-      { _id: 2, host: "replica3:27018" }
+      { _id: 0, host: "replica1:27017" },
+      { _id: 1, host: "replica2:27017" },
+      { _id: 2, host: "replica3:27017" }
     ]
   } )' | mongo localhost:27001 --quiet
 }
