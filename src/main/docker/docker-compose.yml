@@ -33,7 +33,7 @@ version: "2.1"
 services:
   mongodb-auth:
     restart: always
-    image: ${MONGODB_IMAGE}
+    image: "bitnami/mongodb:4.4.9-debian-10-r22"
     expose:
       - "27017"
     ports:
@@ -52,11 +52,11 @@ services:
               - mongodb-auth
   mongodb:
     restart: always
-    image: ${MONGODB_IMAGE}
+    image: "bitnami/mongodb:4.4.9-debian-10-r22"
     expose:
       - "27017"
     ports:
-      - "${MONGODB_PORT}:27017"
+      - "27017:27017"
     healthcheck:
         test: ["CMD-SHELL","echo", "'db.stats().ok' | mongo localhost:27017/test", "--quiet"]
         interval: 30s
@@ -69,13 +69,13 @@ services:
 
   rabbitmq:
     restart: always
-    image: ${RABBITMQ_IMAGE}
+    image: "bitnami/rabbitmq:3.8-debian-9"
     expose:
       - "15672"
       - "5672"
     ports:
-      - "${RABBITMQ_WEB_PORT}:15672"
-      - "${RABBITMQ_AMQP_PORT}:5672"
+      - "15672:15672"
+      - "5672:5672"
     healthcheck:
         test: ["CMD-SHELL", "if rabbitmqctl status; then \nexit 0 \nfi \nexit 1"]
         interval: 30s
@@ -92,11 +92,11 @@ services:
 
   eiffel-er:
     restart: always
-    image: ${EIFFEL_ER_IMAGE}
+    image: "eiffelericsson/eiffel-er:0.0.67"
     expose:
       - "8080"
     ports:
-      - "${EIFFEL_ER_PORT}:8080"
+      - "8084:8080"
     depends_on:
       - rabbitmq
       - mongodb
@@ -111,7 +111,7 @@ services:
        - server.port=8080
        - rabbitmq.host=rabbitmq
        - rabbitmq.componentName=eventrepository
-       - rabbitmq.port=${RABBITMQ_AMQP_PORT}
+       - rabbitmq.port=5672
        - rabbitmq.domainId=ei-domain
        - rabbitmq.durable=true
        - rabbitmq.user=myuser
@@ -122,7 +122,7 @@ services:
        - rabbitmq.createExchangeIfNotExisting=true
        - rabbitmq.consumerName=messageConsumer
        - mongodb.host=mongodb
-       - mongodb.port=${MONGODB_PORT}
+       - mongodb.port=27017
        - mongodb.database=eiffel
        - mongodb.collection=events
        - mongodb.user
@@ -140,17 +140,17 @@ services:
        - index.dynamicIndex.maxIndexesCount=5
        - index.dynamicIndex.filePath=src/main/resources/dynamic_indexing.json
        - index.dynamicIndex.fileUpdatePeriod=30
-       - WAIT_MB_HOSTS=rabbitmq:${RABBITMQ_WEB_PORT}
-       - WAIT_DB_HOSTS=mongodb:${MONGODB_PORT}
+       - WAIT_MB_HOSTS=rabbitmq:15672
+       - WAIT_DB_HOSTS=mongodb:MONGODB_PORT
 
 
   jenkins:
     restart: always
-    image: ${JENKINS_IMAGE}
+    image: "bitnami/jenkins:2.138.3"
     expose:
       - "8080"
     ports:
-      - "${JENKINS_PORT}:8080"
+      - "8082:8080"
     depends_on:
       - rabbitmq
       - mongodb
@@ -164,18 +164,18 @@ services:
           - jenkins
 
   mail-server:
-    image: ${MAILSERVER_IMAGE}
+    image: "mailhog/mailhog"
     expose:
       - "1025"
       - "8025"
     ports:
-      - "${MAIL_SMTP_PORT}:1025"
-      - "${MAIL_WEB_PORT}:8025"
+      - "1025:1025"
+      - "8025:8025"
     depends_on:
       - mongodb
     environment:
       MH_STORAGE: mongodb
-      MH_MONGO_URI: mongodb:${MONGODB_PORT}
+      MH_MONGO_URI: mongodb:27017
       MH_MONGO_COLLECTION: messages
       MH_MONGO_DB: mailhog
     networks:
@@ -185,11 +185,11 @@ services:
 
   ei-backend:
     restart: always
-    image: ${EI_BACKEND_IMAGE}
+    image: "eiffelericsson/eiffel-intelligence-backend:1.0.1"
     expose:
       - "8080"
     ports:
-      - "${EI_BACKEND_PORT}:8080"
+      - "8090:8080"
     depends_on:
       - mongodb
       - rabbitmq
@@ -202,14 +202,14 @@ services:
       - server.port=8080
       - rules.path=src/main/resources/ArtifactRules.json
       - rabbitmq.host=rabbitmq
-      - rabbitmq.port=${RABBITMQ_AMQP_PORT}
+      - rabbitmq.port=5672
       - rabbitmq.domainId=ei-domain
       - rabbitmq.componentName=ei-backend
       - rabbitmq.waitlist.queue.suffix=waitlist
       - rabbitmq.exchange.name=ei-exchange
       - rabbitmq.user=myuser
       - rabbitmq.password=myuser
-      - spring.data.mongodb.uri=mongodb://mongodb:${MONGODB_PORT}
+      - spring.data.mongodb.uri=mongodb://mongodb:27017
       - spring.data.mongodb.database=eiffel2_intelligence
       - failed.notification.collection-name=eiffel2_FailedNotification
       - spring.mail.host=
@@ -218,19 +218,19 @@ services:
       - spring.mail.password=
       - spring.mail.properties.mail.smtp.auth=false
       - spring.mail.properties.mail.smtp.starttls.enable=false
-      - er.url=eiffel-er:${EIFFEL_ER_PORT}/search/
-      - WAIT_MB_HOSTS=rabbitmq:${RABBITMQ_WEB_PORT}
-      - WAIT_DB_HOSTS=mongodb:${MONGODB_PORT}
+      - er.url=eiffel-er:8084/search/
+      - WAIT_MB_HOSTS=rabbitmq:15672
+      - WAIT_DB_HOSTS=mongodb:27017
       - logging.level.root=OFF
       - logging.level.org.springframework.web=DEBUG
       - logging.level.com.ericsson.ei=DEBUG
 
   elasticsearch:
     restart: always
-    image: ${ELASTICSEARCH_IMAGE}
+    image: "docker.elastic.co/elasticsearch/elasticsearch:6.2.4"
     ports:
-      - "${ELASTICSEARCH_PORT1}:9200"
-      - "${ELASTICSEARCH_PORT2}:9300"
+      - "8026:9200"
+      - "8027:9300"
     depends_on:
       - mongodb
     environment:
@@ -253,11 +253,11 @@ services:
 
   kibana:
     restart: always
-    image: ${KIBANA_IMAGE}
+    image: "docker.elastic.co/kibana/kibana:6.2.4"
     expose:
       - "8080"
     ports:
-      - "${KIBANA_PORT}:8080"
+      - "8085:8080"
     depends_on:
       - elasticsearch
     environment:
@@ -273,16 +273,16 @@ services:
 ## monstache is used to sync from mongodb to elasticsearch using oplog in mongodb
   monstache:
     restart: always
-    image: ${MONSTACHE_IMAGE}
+    image: "rwynn/monstache:4.15.1"
     expose:
       - "8080"
     ports:
-      - "${MONSTACHE_PORT}:8080"
+      - "8086:8080"
     depends_on:
       - mongodb
       - elasticsearch
     environment:
-      - MONSTACHE_MONGO_URL=mongodb:${MONGODB_PORT}
+      - MONSTACHE_MONGO_URL=mongodb:27017
       - MONSTACHE_ES_URLS=http://elasticsearch:9200
     links:
       - elasticsearch
