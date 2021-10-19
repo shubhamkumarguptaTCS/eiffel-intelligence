@@ -28,9 +28,15 @@ jobs:
   include:
     - stage: test
       name: unitAndFunctionalTests
+	  before_script:
+        - source src/main/docker/env.bash
+        - printenv
+        - docker-compose -f src/main/docker/docker-compose.yml up -d mongodb mongodb-auth rabbitmq eiffel-er jenkins mail-server
+        - sleep 60
       script:
-		- printenv
         - mvn test -DskipITs -Dsurefire.rerunFailingTestsCount=2 -Dspring.config.location=src/main/resources/application.properties -B
+      after_script:
+        - printenv
     - stage: test
       name: integrationTests
       # To ensure docker containers are fully up and running we sleep 60s
